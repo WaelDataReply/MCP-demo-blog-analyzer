@@ -69,12 +69,15 @@ class Message:
 # client.py
 class MCPClient:
     # MODEL_ID = "anthropic.claude-3-sonnet-20240229-v1:0"
-    MODEL_ID = "anthropic.claude-3-haiku-20240307-v1:0"
+    # MODEL_ID = "anthropic.claude-3-haiku-20240307-v1:0"
+    MODEL_ID = "anthropic.claude-3-5-sonnet-20240620-v1:0"
     
     def __init__(self):
         self.session: Optional[ClientSession] = None
         self.exit_stack = AsyncExitStack()
-        self.bedrock = boto3.client(service_name='bedrock-runtime', region_name='eu-west-3')
+        #self.bedrock = boto3.client(service_name='bedrock-runtime', region_name='eu-west-3')
+        self.session = boto3.Session(profile_name="data_reply")
+        self.bedrock = self.session.client(service_name='bedrock-runtime', region_name='us-east-1')
 
     async def connect_to_server(self, server_script_path: str):
         if not server_script_path.endswith(('.py', '.js')):
